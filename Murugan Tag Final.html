@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Order Print</title>
+  <style>
+    @media print {
+      @page {
+        size: 2in 4in;
+        margin: 0;
+      }
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: "Courier New", monospace;
+        font-size: 12pt;
+        font-weight: 1000;
+        color: #000;
+      }
+      .label {
+        width: 2in;
+        height: 4in;
+        box-sizing: border-box;
+        padding: 10px;
+      }
+      .line {
+        white-space: pre;
+        padding: 2px 0;
+      }
+      button {
+        display: none;
+      }
+    }
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    .form-section {
+      max-width: 300px;
+    }
+    input, select {
+      padding: 5px;
+      width: 100%;
+      margin: 5px 0;
+    }
+    button {
+      margin-top: 10px;
+      padding: 8px 15px;
+      font-size: 14px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-section">
+    <label for="orderId">Order ID:</label>
+    <input type="text" id="orderId" />
+
+    <label for="name">Name:</label>
+    <input type="text" id="name" />
+
+    <label for="delivery">Delivery:</label>
+    <select id="delivery">
+      <option value="Walkin">Walkin</option>
+      <option value="Pickup">Pickup</option>
+    </select>
+
+    <label for="service">Service:</label>
+    <select id="service">
+      <option value="Wash and Fold">Wash and Fold</option>
+      <option value="Wash and Iron">Wash and Iron</option>
+      <option value="Iron">Iron</option>
+      <option value="Dry Clean">Dry Clean</option>
+      <option value="Home Care">Home Care</option>
+      <option value="Carpet Care">Carpet Care</option>
+      <option value="Shoe Clean">Shoe Clean</option>
+      <option value="White Bleach">White Bleach</option>
+      <option value="Sandal Clean">Sandal Clean</option>
+    </select>
+
+    <label for="clothQty">Quantity of Clothes:</label>
+    <input type="number" id="clothQty" min="1" />
+
+    <label for="date">Date:</label>
+    <input type="date" id="date" />
+
+    <button onclick="printForm()">Print</button>
+  </div>
+
+  <!-- Normal/Express Popup -->
+  <div id="overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; 
+  background:rgba(0,0,0,0.5); z-index:9998;"></div>
+
+  <div id="serviceModal" style="display:none; position:fixed; top:50%; left:50%; 
+  transform:translate(-50%,-50%); background:#fff; border:2px solid #000; 
+  padding:20px; text-align:center; z-index:9999; width:250px; border-radius:8px;">
+    <p style="font-weight:bold;">Choose Service Type</p>
+    <button onclick="setServiceType('Normal')" 
+      style="margin:10px; padding:10px 20px; font-size:14px;">Normal</button>
+    <button onclick="setServiceType('Express')" 
+      style="margin:10px; padding:10px 20px; font-size:14px;">Express</button>
+  </div>
+
+  <script>
+  let finalService = "";
+
+  document.getElementById("service").addEventListener("change", function() {
+    let selected = this.value;
+    if (["Wash and Fold", "Wash and Iron", "Iron", "Dry Clean"].includes(selected)) {
+      // Show modal + overlay
+      document.getElementById("overlay").style.display = "block";
+      document.getElementById("serviceModal").style.display = "block";
+      finalService = selected; // base service
+    } else {
+      finalService = selected; // no popup for others
+    }
+  });
+
+  function setServiceType(type) {
+    finalService = finalService + " " + type;
+    document.getElementById("overlay").style.display = "none";
+    document.getElementById("serviceModal").style.display = "none";
+  }
+
+  function printForm() {
+    const orderId = document.getElementById("orderId").value;
+    const name = document.getElementById("name").value;
+    const delivery = document.getElementById("delivery").value;
+    const service = finalService || document.getElementById("service").value;
+    const clothQty = document.getElementById("clothQty").value;
+    const date = document.getElementById("date").value;
+
+    const printWindow = window.open('', '', 'width=600,height=800');
+    printWindow.document.write('<html><head><title>Print</title>');
+    printWindow.document.write('<style>');
+    printWindow.document.write('@page { size: 2in 4in; margin: 0; }');
+    printWindow.document.write('body { margin: 0; padding: 0; font-family: Courier New, monospace; font-size: 12pt; font-weight: 1000; color: #000; }');
+    printWindow.document.write('.label { width: 2in; height: 4in; box-sizing: border-box; padding: 10px; }');
+    printWindow.document.write('.line { white-space: pre; padding: 2px 0; }');
+    printWindow.document.write('</style></head><body>');
+
+    printWindow.document.write('<div class="label">');
+    printWindow.document.write('<div class="line">MURUGAN LAUNDRY</div>');
+    printWindow.document.write('<div class="line">------------------------------</div>');
+    printWindow.document.write('<div class="line">Order ID : ' + orderId + '</div>');
+    printWindow.document.write('<div class="line">Name     : ' + name + '</div>');
+    printWindow.document.write('<div class="line">Delivery : ' + delivery + '</div>');
+    // ✅ Service line auto-wrap enabled
+    printWindow.document.write('<div class="line" style="white-space: normal; word-wrap: break-word;">Service  : ' + service + '</div>');
+    printWindow.document.write('<div class="line">Qty      : ' + clothQty + '</div>');
+    printWindow.document.write('<div class="line">Date     : ' + date + '</div>');
+    printWindow.document.write('<div class="line">------------------------------</div>');
+    printWindow.document.write('</div>');
+
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+    printWindow.focus();
+    printWindow.print();
+  }
+  </script>
+</body>
+</html>
