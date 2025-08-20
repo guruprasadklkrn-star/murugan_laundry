@@ -134,12 +134,6 @@
     const orderId = document.getElementById("orderId").value;
     const name = document.getElementById("name").value;
     const delivery = document.getElementById("delivery").value;
-    
-    // ✅ Only append (Exp) if express selected
-    let service = finalService;
-    if (serviceType === "Express") {
-      service += " (Exp)";
-    }
 
     const clothQty = document.getElementById("clothQty").value;
     const date = document.getElementById("date").value;
@@ -155,17 +149,25 @@
     printWindow.document.write('</style></head><body>');
 
     printWindow.document.write('<div class="label">');
-    // ✅ Centered shop name
     printWindow.document.write('<div class="line center">MURUGAN LAUNDRY</div>');
-    printWindow.document.write('<div class="line">==============================</div>');
+    printWindow.document.write('<div class="line">------------------------------</div>');
     printWindow.document.write('<div class="line">Order ID : ' + orderId + '</div>');
     printWindow.document.write('<div class="line">Name     : ' + name + '</div>');
     printWindow.document.write('<div class="line">Delivery : ' + delivery + '</div>');
-    // ✅ Force single line, no wrapping
-    printWindow.document.write('<div class="line" style="white-space: nowrap;">Service  : ' + service + '</div>');
+
+    // ✅ Service handling
+    if (serviceType === "Express") {
+      printWindow.document.write('<div class="line">Service  : ' + finalService + '</div>');
+      // (Exp) aligned with service name text
+      let spaces = " ".repeat(10); // same offset as "Service  : "
+      printWindow.document.write('<div class="line">' + spaces + '(Exp)</div>');
+    } else {
+      printWindow.document.write('<div class="line">Service  : ' + finalService + '</div>');
+    }
+
     printWindow.document.write('<div class="line">Qty      : ' + clothQty + '</div>');
     printWindow.document.write('<div class="line">Date     : ' + date + '</div>');
-    printWindow.document.write('<div class="line">==============================</div>');
+    printWindow.document.write('<div class="line">------------------------------</div>');
     printWindow.document.write('</div>');
 
     printWindow.document.write('</body></html>');
@@ -176,4 +178,3 @@
   </script>
 </body>
 </html>
-
