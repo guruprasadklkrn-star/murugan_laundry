@@ -151,11 +151,9 @@
     printWindow.document.write('<div class="line">Name     : ' + name + '</div>');
     printWindow.document.write('<div class="line">Delivery : ' + delivery + '</div>');
 
-    // ✅ Service handling
+    // ✅ Service handling with natural wrapping
     if (serviceType === "Express") {
-      printWindow.document.write('<div class="line">Service  : ' + finalService + '</div>');
-      let spaces = " ".repeat(10); // aligns with service text
-      printWindow.document.write('<div class="line">' + spaces + '(Exp)</div>');
+      printWindow.document.write('<div class="line" style="white-space:normal;">Service  : ' + finalService + ' (Exp)</div>');
     } else {
       printWindow.document.write('<div class="line">Service  : ' + finalService + '</div>');
     }
