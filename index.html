@@ -144,22 +144,25 @@
     printWindow.document.write('</style></head><body>');
 
     printWindow.document.write('<div class="label">');
+    // ✅ Proper center alignment for shop name
     printWindow.document.write('<div style="text-align:center;white-space:normal;">MURUGAN LAUNDRY</div>');
-    printWindow.document.write('<div style="border-top:1px dashed #000; margin:4px 0;"></div>');
+    printWindow.document.write('<div class="line">------------------------------</div>');
     printWindow.document.write('<div class="line">Order ID : ' + orderId + '</div>');
     printWindow.document.write('<div class="line">Name     : ' + name + '</div>');
     printWindow.document.write('<div class="line">Delivery : ' + delivery + '</div>');
 
-    // Service handling with wrapping
+    // ✅ Service handling
     if (serviceType === "Express") {
-      printWindow.document.write('<div class="line" style="white-space:normal;">Service  : ' + finalService + '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(Exp)</div>');
+      printWindow.document.write('<div class="line">Service  : ' + finalService + '</div>');
+      let spaces = " ".repeat(10); // aligns with service text
+      printWindow.document.write('<div class="line">' + spaces + '(Exp)</div>');
     } else {
       printWindow.document.write('<div class="line">Service  : ' + finalService + '</div>');
     }
 
     printWindow.document.write('<div class="line">Qty      : ' + clothQty + '</div>');
     printWindow.document.write('<div class="line">Date     : ' + date + '</div>');
-    printWindow.document.write('<div style="border-bottom:1px dashed #000; margin:4px 0;"></div>');
+    printWindow.document.write('<div class="line">------------------------------</div>');
     printWindow.document.write('</div>');
 
     printWindow.document.write('</body></html>');
@@ -170,4 +173,3 @@
   </script>
 </body>
 </html>
-
