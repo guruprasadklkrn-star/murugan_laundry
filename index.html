@@ -29,6 +29,7 @@
       }
       .center {
         text-align: center;
+        display: block;
       }
       button {
         display: none;
@@ -134,7 +135,6 @@
     const orderId = document.getElementById("orderId").value;
     const name = document.getElementById("name").value;
     const delivery = document.getElementById("delivery").value;
-
     const clothQty = document.getElementById("clothQty").value;
     const date = document.getElementById("date").value;
 
@@ -145,10 +145,11 @@
     printWindow.document.write('body { margin: 0; padding: 0; font-family: Courier New, monospace; font-size: 13pt; font-weight: bold; color: #000; }');
     printWindow.document.write('.label { width: 2in; height: 4in; box-sizing: border-box; padding: 10px; }');
     printWindow.document.write('.line { white-space: pre; padding: 2px 0; }');
-    printWindow.document.write('.center { text-align: center; }');
+    printWindow.document.write('.center { text-align: center; display:block; }');
     printWindow.document.write('</style></head><body>');
 
     printWindow.document.write('<div class="label">');
+    // ✅ Fully center aligned shop name
     printWindow.document.write('<div class="line center">MURUGAN LAUNDRY</div>');
     printWindow.document.write('<div class="line">------------------------------</div>');
     printWindow.document.write('<div class="line">Order ID : ' + orderId + '</div>');
@@ -158,8 +159,8 @@
     // ✅ Service handling
     if (serviceType === "Express") {
       printWindow.document.write('<div class="line">Service  : ' + finalService + '</div>');
-      // (Exp) aligned with service name text
-      let spaces = " ".repeat(10); // same offset as "Service  : "
+      // Align "(Exp)" with service text (after colon)
+      let spaces = " ".repeat(10);
       printWindow.document.write('<div class="line">' + spaces + '(Exp)</div>');
     } else {
       printWindow.document.write('<div class="line">Service  : ' + finalService + '</div>');
