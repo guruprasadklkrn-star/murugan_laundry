@@ -27,10 +27,6 @@
         white-space: pre;
         padding: 2px 0;
       }
-      .center {
-        text-align: center;
-        display: block;
-      }
       button {
         display: none;
       }
@@ -145,12 +141,11 @@
     printWindow.document.write('body { margin: 0; padding: 0; font-family: Courier New, monospace; font-size: 13pt; font-weight: bold; color: #000; }');
     printWindow.document.write('.label { width: 2in; height: 4in; box-sizing: border-box; padding: 10px; }');
     printWindow.document.write('.line { white-space: pre; padding: 2px 0; }');
-    printWindow.document.write('.center { text-align: center; display:block; }');
     printWindow.document.write('</style></head><body>');
 
     printWindow.document.write('<div class="label">');
-    // ✅ Fully center aligned shop name
-    printWindow.document.write('<div class="line center">MURUGAN LAUNDRY</div>');
+    // ✅ Proper center alignment for shop name
+    printWindow.document.write('<div style="text-align:center;">MURUGAN LAUNDRY</div>');
     printWindow.document.write('<div class="line">------------------------------</div>');
     printWindow.document.write('<div class="line">Order ID : ' + orderId + '</div>');
     printWindow.document.write('<div class="line">Name     : ' + name + '</div>');
