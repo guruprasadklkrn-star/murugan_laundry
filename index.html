@@ -24,7 +24,7 @@
         padding: 10px;
       }
       .line {
-        white-space: pre-wrap; /* allow wrapping */
+        white-space: pre;
         padding: 2px 0;
       }
       button {
@@ -140,26 +140,26 @@
     printWindow.document.write('@page { size: 2in 4in; margin: 0; }');
     printWindow.document.write('body { margin: 0; padding: 0; font-family: Courier New, monospace; font-size: 13pt; font-weight: bold; color: #000; }');
     printWindow.document.write('.label { width: 2in; height: 4in; box-sizing: border-box; padding: 10px; }');
-    printWindow.document.write('.line { white-space: pre-wrap; padding: 2px 0; }'); // wrap allowed
+    printWindow.document.write('.line { white-space: pre; padding: 2px 0; }');
     printWindow.document.write('</style></head><body>');
 
     printWindow.document.write('<div class="label">');
     printWindow.document.write('<div style="text-align:center;white-space:normal;">MURUGAN LAUNDRY</div>');
-    printWindow.document.write('<div class="line">------------------------------</div>');
+    printWindow.document.write('<div style="border-top:1px dashed #000; margin:4px 0;"></div>');
     printWindow.document.write('<div class="line">Order ID : ' + orderId + '</div>');
     printWindow.document.write('<div class="line">Name     : ' + name + '</div>');
     printWindow.document.write('<div class="line">Delivery : ' + delivery + '</div>');
 
-    // ✅ Service handling: (Exp) wraps only if needed
+    // Service handling with wrapping
     if (serviceType === "Express") {
-      printWindow.document.write('<div class="line">Service  : ' + finalService + ' <span style="display:inline-block;">(Exp)</span></div>');
+      printWindow.document.write('<div class="line" style="white-space:normal;">Service  : ' + finalService + '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(Exp)</div>');
     } else {
       printWindow.document.write('<div class="line">Service  : ' + finalService + '</div>');
     }
 
     printWindow.document.write('<div class="line">Qty      : ' + clothQty + '</div>');
     printWindow.document.write('<div class="line">Date     : ' + date + '</div>');
-    printWindow.document.write('<div class="line">------------------------------</div>');
+    printWindow.document.write('<div style="border-bottom:1px dashed #000; margin:4px 0;"></div>');
     printWindow.document.write('</div>');
 
     printWindow.document.write('</body></html>');
