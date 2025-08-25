@@ -128,39 +128,42 @@
       background: #29b6f6;
     }
 
-    /* Popup overlay */
+    /* Popup overlay (no flex by default) */
     #overlay {
-      display:none; 
-      position:fixed; 
-      top:0; left:0; width:100%; height:100%; 
-      background:rgba(0,0,0,0.5); 
-      z-index:9998;
+      display: none; 
+      position: fixed; 
+      top: 0; left: 0; width: 100%; height: 100%; 
+      background: rgba(0,0,0,0.5); 
+      z-index: 9998;
     }
     #serviceModal {
-      display:none; 
-      position:fixed; 
-      top:50%; left:50%; 
-      transform:translate(-50%,-50%); 
-      background:#fff; 
-      border:2px solid #4fc3f7; 
-      padding:20px; 
-      text-align:center; 
-      z-index:9999; 
-      width:260px; 
-      border-radius:12px;
+      display: none; 
+      background: #fff; 
+      border: 2px solid #4fc3f7; 
+      padding: 20px; 
+      text-align: center; 
+      z-index: 9999; 
+      width: 260px; 
+      border-radius: 12px;
       box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+      position: relative;
     }
     #serviceModal p {
-      font-weight:bold; 
-      margin-bottom:15px;
+      font-weight: bold; 
+      margin-bottom: 15px;
       color: #0277bd;
     }
-    #serviceModal button {
-      width: 45%;
-      margin: 5px;
+
+    /* Buttons side by side */
+    .modal-buttons {
+      display: flex;
+      gap: 10px;
+    }
+    .modal-buttons button {
+      flex: 1;
       background: #81d4fa;
     }
-    #serviceModal button:hover {
+    .modal-buttons button:hover {
       background: #4fc3f7;
     }
   </style>
@@ -216,11 +219,14 @@
   </div>
 
   <!-- Overlay and Modal -->
-  <div id="overlay"></div>
-  <div id="serviceModal">
-    <p>Choose Service Type</p>
-    <button onclick="setServiceType('Normal')">Normal</button>
-    <button onclick="setServiceType('Express')">Express</button>
+  <div id="overlay">
+    <div id="serviceModal">
+      <p>Choose Service Type</p>
+      <div class="modal-buttons">
+        <button onclick="setServiceType('Normal')">Normal</button>
+        <button onclick="setServiceType('Express')">Express</button>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -240,8 +246,12 @@
     document.getElementById("service").addEventListener("change", function() {
       let selected = this.value;
       if (["Wash and Fold", "Wash and Iron", "Iron", "Dry Clean","Hand Wash"].includes(selected)) {
-        document.getElementById("overlay").style.display = "block";
-        document.getElementById("serviceModal").style.display = "block";
+        const overlay = document.getElementById("overlay");
+        const modal = document.getElementById("serviceModal");
+        overlay.style.display = "flex"; // flex centering only when shown
+        overlay.style.alignItems = "center";
+        overlay.style.justifyContent = "center";
+        modal.style.display = "block";
         finalService = selected;
       } else {
         finalService = selected; 
@@ -327,7 +337,7 @@
       }
     }
 
-    createBubbles(16); // 16 bubbles total (8 each side approx)
+    createBubbles(16); // 16 bubbles total
   </script>
 </body>
 </html>
