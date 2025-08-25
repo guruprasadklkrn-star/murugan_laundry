@@ -2,59 +2,178 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Order Print</title>
+  <title>Murugan Laundry</title>
   <style>
-    @media print {
-      @page {
-        size: 2in 4in;
-        margin: 0;
-      }
-      body {
-        margin: 0;
-        padding: 0;
-        font-family: "Courier New", monospace;
-        font-size: 13pt;
-        font-weight: bold;
-        color: #000;
-      }
-      .label {
-        width: 2in;
-        height: 4in;
-        box-sizing: border-box;
-        padding: 10px;
-      }
-      .line {
-        white-space: pre;
-        padding: 2px 0;
-      }
-      button {
-        display: none;
-      }
-    }
     body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
+      margin: 0;
+      font-family: 'Poppins', Arial, sans-serif;
+      background: #f0f9ff;
+      color: #333;
     }
-    .form-section {
-      max-width: 300px;
+
+    /* Header */
+    header {
+      background: linear-gradient(135deg, #b3e5fc, #e1f5fe);
+      text-align: center;
+      padding: 25px 10px 40px;
+      border-bottom: 2px solid #bbdefb;
+      position: relative;
+      overflow: hidden;
     }
-    input, select {
-      padding: 5px;
-      width: 100%;
-      margin: 5px 0;
+    header h1 {
+      margin: 0;
+      font-size: 32px;
+      color: #0277bd;
+      letter-spacing: 1px;
+      position: relative;
+      z-index: 2;
     }
-    button {
-      margin-top: 10px;
-      padding: 8px 15px;
+    header p {
+      margin: 5px 0 0;
       font-size: 14px;
-      background-color: #4CAF50;
-      color: white;
+      color: #0288d1;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Bubble animation */
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.7);
+      animation: floatUp linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0) scale(1); opacity: 0.9; }
+      50% { transform: translateY(-80px) scale(1.1); opacity: 0.6; }
+      100% { transform: translateY(-160px) scale(1); opacity: 0; }
+    }
+
+    /* Form container */
+    .form-section {
+      max-width: 360px;
+      margin: 30px auto;
+      padding: 25px;
+      background: #ffffff;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .form-section::before,
+    .form-section::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(179, 229, 252, 0.4);
+      z-index: 0;
+    }
+    .form-section::before {
+      width: 100px; height: 100px;
+      top: -30px; left: -30px;
+    }
+    .form-section::after {
+      width: 150px; height: 150px;
+      bottom: -40px; right: -40px;
+    }
+
+    label {
+      display: block;
+      margin: 10px 0 5px;
+      font-weight: 500;
+      font-size: 14px;
+      position: relative;
+      z-index: 1;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 12px;
+      border: 1px solid #b3e5fc;
+      border-radius: 8px;
+      font-size: 14px;
+      background: #f9fcff;
+      z-index: 1;
+      position: relative;
+      box-sizing: border-box;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: #4fc3f7;
+      box-shadow: 0 0 6px rgba(79,195,247,0.4);
+    }
+
+    button {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      background: #4fc3f7;
+      color: #fff;
       border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: bold;
       cursor: pointer;
+      transition: background 0.3s;
+      z-index: 1;
+      position: relative;
+    }
+
+    button:hover {
+      background: #29b6f6;
+    }
+
+    /* Popup overlay */
+    #overlay {
+      display:none; 
+      position:fixed; 
+      top:0; left:0; width:100%; height:100%; 
+      background:rgba(0,0,0,0.5); 
+      z-index:9998;
+    }
+    #serviceModal {
+      display:none; 
+      position:fixed; 
+      top:50%; left:50%; 
+      transform:translate(-50%,-50%); 
+      background:#fff; 
+      border:2px solid #4fc3f7; 
+      padding:20px; 
+      text-align:center; 
+      z-index:9999; 
+      width:260px; 
+      border-radius:12px;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+    }
+    #serviceModal p {
+      font-weight:bold; 
+      margin-bottom:15px;
+      color: #0277bd;
+    }
+    #serviceModal button {
+      width: 45%;
+      margin: 5px;
+      background: #81d4fa;
+    }
+    #serviceModal button:hover {
+      background: #4fc3f7;
     }
   </style>
 </head>
 <body>
+  <header>
+    <h1>Murugan Laundry</h1>
+    <p>Fresh, Clean and Ready for You.</p>
+
+    <!-- Bubble container -->
+    <div class="bubbles"></div>
+  </header>
+
   <div class="form-section">
     <label for="orderId">Order ID:</label>
     <input type="text" id="orderId" />
@@ -64,16 +183,18 @@
 
     <label for="delivery">Delivery:</label>
     <select id="delivery">
+      <option value="">-- Select Delivery --</option>
       <option value="Walkin">Walkin</option>
       <option value="Pickup">Pickup</option>
     </select>
 
     <label for="service">Service:</label>
     <select id="service">
+      <option value="">-- Select Service --</option>
       <option value="Wash and Fold">Wash and Fold</option>
       <option value="Wash and Iron">Wash and Iron</option>
       <option value="Iron">Iron</option>
-      <option value="Dry Clean">Hand Wash</option>
+      <option value="Hand Wash">Hand Wash</option>
       <option value="Dry Clean">Dry Clean</option>
       <option value="Home Care">Home Care</option>
       <option value="Carpet Care">Carpet Care</option>
@@ -85,95 +206,128 @@
     <label for="clothQty">Quantity of Clothes:</label>
     <input type="number" id="clothQty" min="1" />
 
+    <label for="bagQty">No of Bags:</label>
+    <input type="number" id="bagQty" min="1" />
+
     <label for="date">Date:</label>
     <input type="date" id="date" />
 
     <button onclick="printForm()">Print</button>
   </div>
 
-  <!-- Normal/Express Popup -->
-  <div id="overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; 
-  background:rgba(0,0,0,0.5); z-index:9998;"></div>
-
-  <div id="serviceModal" style="display:none; position:fixed; top:50%; left:50%; 
-  transform:translate(-50%,-50%); background:#fff; border:2px solid #000; 
-  padding:20px; text-align:center; z-index:9999; width:250px; border-radius:8px;">
-    <p style="font-weight:bold;">Choose Service Type</p>
-    <button onclick="setServiceType('Normal')" 
-      style="margin:10px; padding:10px 20px; font-size:14px;">Normal</button>
-    <button onclick="setServiceType('Express')" 
-      style="margin:10px; padding:10px 20px; font-size:14px;">Express</button>
+  <!-- Overlay and Modal -->
+  <div id="overlay"></div>
+  <div id="serviceModal">
+    <p>Choose Service Type</p>
+    <button onclick="setServiceType('Normal')">Normal</button>
+    <button onclick="setServiceType('Express')">Express</button>
   </div>
 
   <script>
-  let finalService = "";
-  let serviceType = "";
+    let finalService = "";
+    let serviceType = "";
 
-  document.getElementById("service").addEventListener("change", function() {
-    let selected = this.value;
-    if (["Wash and Fold", "Wash and Iron", "Iron", "Dry Clean"].includes(selected)) {
-      // Show modal + overlay
-      document.getElementById("overlay").style.display = "block";
-      document.getElementById("serviceModal").style.display = "block";
-      finalService = selected; // base service
-    } else {
-      finalService = selected; 
-      serviceType = ""; // reset type
-    }
-  });
+    const clothQtyInput = document.getElementById("clothQty");
+    const bagQtyInput = document.getElementById("bagQty");
 
-  function setServiceType(type) {
-    serviceType = type;
-    document.getElementById("overlay").style.display = "none";
-    document.getElementById("serviceModal").style.display = "none";
-  }
+    clothQtyInput.addEventListener("input", function() {
+      bagQtyInput.disabled = !!this.value;
+    });
+    bagQtyInput.addEventListener("input", function() {
+      clothQtyInput.disabled = !!this.value;
+    });
 
-  function printForm() {
-    const orderId = document.getElementById("orderId").value;
-    const name = document.getElementById("name").value;
-    const delivery = document.getElementById("delivery").value;
-    const clothQty = document.getElementById("clothQty").value;
-    const date = document.getElementById("date").value;
+    document.getElementById("service").addEventListener("change", function() {
+      let selected = this.value;
+      if (["Wash and Fold", "Wash and Iron", "Iron", "Dry Clean","Hand Wash"].includes(selected)) {
+        document.getElementById("overlay").style.display = "block";
+        document.getElementById("serviceModal").style.display = "block";
+        finalService = selected;
+      } else {
+        finalService = selected; 
+        serviceType = "";
+      }
+    });
 
-    const printWindow = window.open('', '', 'width=600,height=800');
-    printWindow.document.write('<html><head><title>Print</title>');
-    printWindow.document.write('<style>');
-    printWindow.document.write('@page { size: 2in 4in; margin: 0; }');
-    printWindow.document.write('body { margin: 0; padding: 0; font-family: Courier New, monospace; font-size: 13pt; font-weight: bold; color: #000; }');
-    printWindow.document.write('.label { width: 2in; height: 4in; box-sizing: border-box; padding: 10px; }');
-    printWindow.document.write('.line { white-space: pre; padding: 2px 0; }');
-    printWindow.document.write('</style></head><body>');
-
-    printWindow.document.write('<div class="label">');
-    // ✅ Proper center alignment for shop name
-    printWindow.document.write('<div style="text-align:center;white-space:normal;">MURUGAN LAUNDRY</div>');
-    printWindow.document.write('<div class="line">------------------------------</div>');
-    printWindow.document.write('<div class="line">Order ID : ' + orderId + '</div>');
-    printWindow.document.write('<div class="line">Name     : ' + name + '</div>');
-    printWindow.document.write('<div class="line">Delivery : ' + delivery + '</div>');
-
-    // ✅ Service handling
-    if (serviceType === "Express") {
-      printWindow.document.write('<div class="line">Service  : ' + finalService + '</div>');
-      let spaces = " ".repeat(10); // aligns with service text
-      printWindow.document.write('<div class="line">' + spaces + '(Exp)</div>');
-    } else {
-      printWindow.document.write('<div class="line">Service  : ' + finalService + '</div>');
+    function setServiceType(type) {
+      serviceType = type;
+      document.getElementById("overlay").style.display = "none";
+      document.getElementById("serviceModal").style.display = "none";
     }
 
-    printWindow.document.write('<div class="line">Qty      : ' + clothQty + '</div>');
-    printWindow.document.write('<div class="line">Date     : ' + date + '</div>');
-    printWindow.document.write('<div class="line">------------------------------</div>');
-    printWindow.document.write('</div>');
+    function printForm() {
+      const orderId = document.getElementById("orderId").value;
+      const name = document.getElementById("name").value;
+      const delivery = document.getElementById("delivery").value;
+      const clothQty = clothQtyInput.value;
+      const bagQty = bagQtyInput.value;
+      const date = document.getElementById("date").value;
 
-    printWindow.document.write('</body></html>');
-    printWindow.document.close();
-    printWindow.focus();
-    printWindow.print();
-  }
+      const printWindow = window.open('', '', 'width=600,height=800');
+      printWindow.document.write('<html><head><title>Print</title>');
+      printWindow.document.write('<style>@page { size: 2in 4in; margin: 0; } body { margin:0; padding:0; font-family: Courier New, monospace; font-size:13pt; font-weight:bold; color:#000; } .label { width:2in; height:4in; box-sizing:border-box; padding:10px; } .line { white-space:pre; padding:2px 0; }</style></head><body>');
+      printWindow.document.write('<div class="label">');
+      printWindow.document.write('<div style="text-align:center;white-space:normal;">MURUGAN LAUNDRY</div>');
+      printWindow.document.write('<div class="line">------------------------------</div>');
+      printWindow.document.write('<div class="line">Order ID : ' + orderId + '</div>');
+      printWindow.document.write('<div class="line">Name     : ' + name + '</div>');
+      printWindow.document.write('<div class="line">Delivery : ' + delivery + '</div>');
+      if (serviceType === "Express") {
+        printWindow.document.write('<div class="line">Service  : ' + finalService + '</div>');
+        let spaces = " ".repeat(10);
+        printWindow.document.write('<div class="line">' + spaces + '(Exp)</div>');
+      } else {
+        printWindow.document.write('<div class="line">Service  : ' + finalService + '</div>');
+      }
+      if (clothQty) {
+        printWindow.document.write('<div class="line">Qty      : ' + clothQty + '</div>');
+      } else if (bagQty) {
+        printWindow.document.write('<div class="line">Bags     : ' + bagQty + '</div>');
+      }
+      printWindow.document.write('<div class="line">Date     : ' + date + '</div>');
+      printWindow.document.write('<div class="line">------------------------------</div>');
+      printWindow.document.write('</div>');
+      printWindow.document.write('</body></html>');
+      printWindow.document.close();
+      printWindow.focus();
+      printWindow.print();
+    }
+
+    /* Bubble generator */
+    const bubblesContainer = document.querySelector(".bubbles");
+    function createBubbles(count) {
+      for (let i = 0; i < count; i++) {
+        const b = document.createElement("div");
+        b.classList.add("bubble");
+
+        const size = Math.random() * 15 + 8; // 8–23px
+        b.style.width = size + "px";
+        b.style.height = size + "px";
+
+        // random left/right
+        if (Math.random() > 0.5) {
+          b.style.left = Math.random() * 25 + "%";
+        } else {
+          b.style.right = Math.random() * 25 + "%";
+        }
+
+        // random bottom or top start
+        if (Math.random() > 0.5) {
+          b.style.bottom = "-40px";
+        } else {
+          b.style.top = "-40px";
+        }
+
+        const duration = Math.random() * 5 + 4; // 4–9s
+        const delay = Math.random() * 5; // 0–5s
+        b.style.animationDuration = duration + "s";
+        b.style.animationDelay = delay + "s";
+
+        bubblesContainer.appendChild(b);
+      }
+    }
+
+    createBubbles(16); // 16 bubbles total (8 each side approx)
   </script>
 </body>
 </html>
-
-
-
